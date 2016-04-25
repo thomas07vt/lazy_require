@@ -2,7 +2,9 @@ require "lazy_require/version"
 
 module LazyRequire
 
-  def self.load(files)
+  class << self
+
+  def load(files)
     files = toArray(files)
     failed_files = try_to_require(files)
 
@@ -15,14 +17,14 @@ module LazyRequire
     true
   end
 
-  def self.load_all(glob)
+  def load_all(glob)
     files = Dir[glob]
     self.load(files)
   end
 
   private
 
-  def self.toArray(files)
+  def toArray(files)
     if files.is_a?(Array)
       files
     else
@@ -30,16 +32,18 @@ module LazyRequire
     end
   end
 
-  def self.try_to_require(files)
+  def try_to_require(files)
     failed = []
     files.each do |file|
       begin
         require "#{file}"
-      rescue NameError => e
+      rescue NameError
         failed << file
       end
     end
     failed
+  end
+
   end
 
 
