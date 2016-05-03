@@ -3,46 +3,47 @@ require "lazy_require/version"
 module LazyRequire
 
   class << self
+    alias_method :kernal_require, :require
 
-  def load(files)
-    files = toArray(files)
-    failed_files = try_to_require(files)
+    def require(files)
+      files = toArray(files)
+      failed_files = try_to_require(files)
 
-    if failed_files.length == files.length
-      raise "Could not load files: \n#{failed_files.join("\n")}\n"
-    elsif failed_files.length != 0
-      self.load(failed_files)
+      if failed_files.length == files.length
+        kernal_require "#{files.first}"
+      elsif failed_files.length != 0
+        self.require(failed_files)
+      end
+
+      true
     end
 
-    true
-  end
-
-  def load_all(glob)
-    files = Dir[glob]
-    self.load(files)
-  end
-
-  private
-
-  def toArray(files)
-    if files.is_a?(Array)
-      files
-    else
-      [files]
+    def require_all(glob)
+      files = Dir[glob]
+      self.require(files)
     end
-  end
 
-  def try_to_require(files)
-    failed = []
-    files.each do |file|
-      begin
-        require "#{file}"
-      rescue NameError
-        failed << file
+    private
+
+    def toArray(files)
+      if files.is_a?(Array)
+        files
+      else
+        [files]
       end
     end
-    failed
-  end
+
+    def try_to_require(files)
+      failed = []
+      files.each do |file|
+        begin
+          kernal_require "#{file}"
+        rescue NameError
+          failed << file
+        end
+      end
+      failed
+    end
 
   end
 
