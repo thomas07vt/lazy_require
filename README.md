@@ -82,7 +82,7 @@ With **LazyRequire**, you can ask it to load all the files in your project/folde
 ```ruby
 # App.rb
 
-LazyRequire.load_all('./lib/**/*.rb')
+LazyRequire.require_all('./lib/**/*.rb')
 
 class App
   # Some stuff here
@@ -92,21 +92,20 @@ end
 **LazyRequire.load_all()** accepts any glob pattern and will try to require all files that it finds with that glob pattern. If it it successfully loads all files it will return true:
 
 ```ruby
-2.3.0 :010 >   LazyRequire.load_all('./spec/support/load_all/**/*.rb')
+2.3.0 :010 >   LazyRequire.require_all('./spec/support/load_all/**/*.rb')
 #=> true 
 ```
 
 If it cannot load any of the files, it will raise an exception:
 
 ```ruby
-2.3.0 :006 > LazyRequire.load_all('./spec/support/errors/**/*.rb')
-RuntimeError: Could not load files: 
-./spec/support/errors/top_two.rb
-./spec/support/errors/top.rb
+2.3.0 :005 > LazyRequire.require(@files)
+NameError: uninitialized constant Top
+	from /code/lazy_require/spec/support/errors/top_two.rb:2:in `<top (required)>'
+	from /code/lazy_require/lib/lazy_require.rb:13:in `require'
+	from /code/lazy_require/lib/lazy_require.rb:13:in `require'
+	from (irb):5
 
-	from ../code/lazy_require/lib/lazy_require.rb:12:in `load'
-	from ../code/lazy_require/lib/lazy_require.rb:22:in `load_all'
-	from (irb):6
 ```
 
 If you want to load a specific collection of files and avoid using the glob pattern, you can do that to using the #load() method.
@@ -117,7 +116,7 @@ files = [
   './spec/support/errors/top.rb',
 ]
 
-LazyRequire.load(files)
+LazyRequire.require(files)
 #=> true
 ```
 
