@@ -108,7 +108,7 @@ NameError: uninitialized constant Top
 
 ```
 
-If you want to load a specific collection of files and avoid using the glob pattern, you can do that to using the #load() method.
+If you want to load a specific collection of files and avoid using the glob pattern, you can do that to using the LazyRequire#require() method.
 
 ```ruby
 files = [
